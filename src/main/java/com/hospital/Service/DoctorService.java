@@ -2,8 +2,8 @@ package com.hospital.Service;
 
 import com.hospital.Controller.Input.DoctorInput;
 import com.hospital.Controller.Output.AppointmentOutput;
+import com.hospital.Controller.Output.DoctorCodeOutPut;
 import com.hospital.Controller.Output.DoctorOutput;
-import com.hospital.Domain.Appointment;
 import com.hospital.Domain.Doctor;
 
 import com.hospital.Exception.*;
@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 @Service
 public class DoctorService {
@@ -66,21 +63,21 @@ public class DoctorService {
     }
 
     ////////////FALTA QUE LO ORDENE POR MÁS OCUPADO//////////
-    public TreeMap<DoctorOutput, List<AppointmentOutput>> getBusiestDoctors() throws EmployeeNotExistsException {
+    public TreeMap<String, List<AppointmentOutput>> getBusiestDoctors() throws EmployeeNotExistsException {
+
         List<Doctor> allDoctors = doctorRepository.findAll();
-        TreeMap<DoctorOutput, List<AppointmentOutput>> busiestDoctor = new TreeMap<>(
-                Comparator.comparing(doctor -> DoctorOutput.getDoctorOutput((Doctor) doctor).getName()).reversed()
-        );
+        TreeMap<String, List<AppointmentOutput>> busiestDoctor = new TreeMap<>(Collections.reverseOrder());
 
         for (Doctor doctor : allDoctors) {
-            DoctorOutput doctorOutput = DoctorOutput.getDoctorOutput(doctor);
+            String code = doctor.getCode();
+            DoctorCodeOutPut doctorOutput = new DoctorCodeOutPut(code);
 
-            List<AppointmentOutput> allAppointmentOutput = listAppointmentsByCode(doctor.getCode());
+            List<AppointmentOutput> allAppointmentOutput = listAppointmentsByCode(code);
 
             allAppointmentOutput.sort(Comparator.comparing(AppointmentOutput::getTimeAppointment));
 
-            busiestDoctor.put(doctorOutput, allAppointmentOutput);
+            busiestDoctor.put(doctorOutput.getCode(), allAppointmentOutput);
         }
-        return busiestDoctor;
+            return busiestDoctor;
     }
 }

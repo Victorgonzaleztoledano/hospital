@@ -52,7 +52,7 @@ public class AppointmentService {
     //Guardar la cita
     private boolean saveAppointment(List<LocalTime> time, AppointmentInput a) {
         for (LocalTime times : time) { //Compruebo que la hora de la cita esté entre las disponibles
-            if (time.equals(a.getTimeAppointment())) {
+            if (times.equals(a.getTimeAppointment())) {
                 appointmentRepository.save(Appointment.getAppointment(a));
                 return true; // Si se crea da verdadero
             }

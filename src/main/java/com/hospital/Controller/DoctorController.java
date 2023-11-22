@@ -73,9 +73,9 @@ public class DoctorController {
         }
     }
     @GetMapping("/ordered")
-    public ResponseEntity<TreeMap<DoctorOutput, List<AppointmentOutput>>> getBusiestDoctors(){
+    public ResponseEntity<TreeMap<String, List<AppointmentOutput>>> getBusiestDoctors(){
         try{
-            TreeMap<DoctorOutput, List<AppointmentOutput>> busiest = doctorService.getBusiestDoctors();
+            TreeMap<String, List<AppointmentOutput>> busiest = doctorService.getBusiestDoctors();
             return ResponseEntity.ok(busiest);
         }
         catch (EmployeeNotExistsException e){
