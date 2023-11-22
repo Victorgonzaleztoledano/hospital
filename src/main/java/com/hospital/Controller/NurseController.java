@@ -65,7 +65,7 @@ public class NurseController {
     }
 
     @GetMapping("/{code}/appointments")
-    public ResponseEntity<List<AppointmentOutput>> getPatients(@PathVariable String code) {
+    public ResponseEntity<List<AppointmentOutput>> getAppointments(@PathVariable String code) {
         try {
             return ResponseEntity.ok(nurseService.listAppointmentsByCode(code));
         } catch (EmployeeNotExistsException e) {

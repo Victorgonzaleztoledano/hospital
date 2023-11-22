@@ -61,11 +61,12 @@ public class CommonService {
     public List<LocalTime> listTimeAvailableCommon(String code, LocalDate date, LocalTime start, LocalTime end) {
         List<LocalTime> appointments = new ArrayList<>();
         //Rellena el array comprobando no guardar las ya registradas
+        List<Appointment> appointmentsRepo = appointmentRepository.findByEmployeeCodeAndDateAppointmentAndTimeAppointmentBetween(code, date, start, end);
         while (start.isBefore(end)) {
-            if (appointmentRepository.existsByDateAppointmentAndTimeAppointmentAndEmployeeCode(date, start, code)) {
+            LocalTime finalStart = start;
+            if (appointmentsRepo.stream().anyMatch(appointment -> appointment.getTimeAppointment().equals(finalStart))) {
                 start = start.plusHours(1);
                 continue;
-                //Si encuentra una repetida salta a la siguiente vuelta del bucle
             }
             appointments.add(start);
             start = start.plusHours(1);

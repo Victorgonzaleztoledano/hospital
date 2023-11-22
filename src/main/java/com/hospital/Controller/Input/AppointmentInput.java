@@ -1,5 +1,6 @@
 package com.hospital.Controller.Input;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,15 +10,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class AppointmentInput {
-    @NotNull
-    @NotBlank
-    private String id = String.valueOf(UUID.randomUUID());
 
     @NotNull(message = "Day can not be null")
     private LocalDate dateAppointment;
@@ -34,10 +32,4 @@ public class AppointmentInput {
     @NotBlank
     private String codeEmployee;
 
-    public AppointmentInput(LocalDate dateAppointment, LocalTime timeAppointment, String dniPatient, String codeEmployee) {
-        this.dateAppointment = dateAppointment;
-        this.timeAppointment = timeAppointment;
-        this.dniPatient = dniPatient;
-        this.codeEmployee = codeEmployee;
-    }
 }

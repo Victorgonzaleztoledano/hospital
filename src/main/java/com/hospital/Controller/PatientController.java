@@ -41,7 +41,7 @@ public class PatientController {
     }
 
     @GetMapping("/{dni}/appointments")
-    public ResponseEntity<List<AppointmentOutput>> getPatients(@PathVariable String dni) {
+    public ResponseEntity<List<AppointmentOutput>> getAppointmentsPatients(@PathVariable String dni) {
         try {
             return ResponseEntity.ok(patientService.listPatientAppointments(dni));
         } catch (PatientNotFoundException e) {

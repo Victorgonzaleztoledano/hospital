@@ -34,28 +34,41 @@ public class AppointmentService {
     //Me crea la cita comprobando que no haya repetido y que todo exista
     public void addAppointment(AppointmentInput a) throws EmployeeNotExistsException, DoctorNotExistsException, NurseNotExistsException, WrongTimeException, WrongDateException, PatientNotFoundException, AppointmentAlreadyExistsException  {
         if (!appointmentRepository.existsByDniPatientAndDateAppointmentAndTimeAppointment(a.getDniPatient(), a.getDateAppointment(), a.getTimeAppointment())) {//Comprueba que no exista una cita igual
+
             if (commonService.comprobateDni(a.getDniPatient())) {  // y que el dni exista
-                TreeMap<LocalDate, List<LocalTime>> schedule;
-                if(doctorRepository.existsByCode(a.getCodeEmployee())){
-                    schedule = doctorService.listAvailibleAppointments(a.getCodeEmployee());
-                }
-                else if(nurseRepository.existsByCode(a.getCodeEmployee())){
-                    schedule = nurseService.listAvailibleAppointments(a.getCodeEmployee());
-                }
-                else throw new EmployeeNotExistsException("Employee code not found");
+
+                TreeMap<LocalDate, List<LocalTime>> schedule = getTimeSchedule(a.getCodeEmployee());
                 if (schedule.containsKey(a.getDateAppointment())) { //Compruebo que el día es correcto
                     List<LocalTime> timeAvailible = schedule.get(a.getDateAppointment()); //Saco las horas del día
-                    boolean created = false; //Si no se crea la cita al salir del bucle hago excepción
-                    for (LocalTime time : timeAvailible) { //Compruebo que la hora de la cita esté entre las disponibles
-                        if (time.equals(a.getTimeAppointment())) {
-                            appointmentRepository.save(Appointment.getAppointment(a));
-                            created = true; // Si se crea da verdadero
-                        }
-                    } //Si no es verdadero que se crea salta la última excepción
-                    if (created == false) throw new WrongTimeException("Time of schedule can not be registered");
+
+                    boolean created = saveAppointment(timeAvailible, a); //Si dentro del método devuelve false lanzo excepción
+                    if (created != true) throw new WrongTimeException("Time of schedule can not be registered");
+
                 } else throw new WrongDateException("Date can not be registered");
             } else throw new PatientNotFoundException("Patient not found");
         } else throw new AppointmentAlreadyExistsException("Patient already has an appointment");
+    }
+    //Guardar la cita
+    private boolean saveAppointment(List<LocalTime> time, AppointmentInput a){
+        for (LocalTime times : time) { //Compruebo que la hora de la cita esté entre las disponibles
+            if (time.equals(a.getTimeAppointment())) {
+                appointmentRepository.save(Appointment.getAppointment(a));
+                return  true; // Si se crea da verdadero
+            }
+        }
+        return false;
+    }
+    //Obtengo el horario del empleado
+    private TreeMap<LocalDate, List<LocalTime>> getTimeSchedule(String code) throws DoctorNotExistsException, NurseNotExistsException, EmployeeNotExistsException {
+        TreeMap<LocalDate, List<LocalTime>> schedule;
+        if(doctorRepository.existsByCode(code)){
+            schedule = doctorService.listAvailibleAppointments(code);
+        }
+        else if(nurseRepository.existsByCode(code)){
+            schedule = nurseService.listAvailibleAppointments(code);
+        }
+        else throw new EmployeeNotExistsException("Employee code not found");
+        return schedule;
     }
 
     //Imprime todas las citas
@@ -70,24 +83,22 @@ public class AppointmentService {
     }
 
     ////////////FALTA QUE LO ORDENE POR MÁS OCUPADO//////////
-    public TreeMap<DoctorOutput, List<AppointmentOutput>> mostScheduledDoctors() {
-        TreeMap<DoctorOutput, List<AppointmentOutput>> employeeAppointments = new TreeMap<>((o1, o2) -> {
-            //Ordena de más a menos las listas del treemap
-            int size1 = 0;
-            int size2 = 0;
-            if (o1 instanceof List) size1 = ((List<?>) o1).size();
-            if (o2 instanceof List) size2 = ((List<?>) o2).size();
-            return Integer.compare(size1, size2);
-        });
+    public TreeMap<String, List<AppointmentOutput>> mostScheduledDoctors() {
+        TreeMap<String, List<AppointmentOutput>> busiestDoctor = new TreeMap<>(Collections.reverseOrder());
+
         List<Doctor> doctors = doctorRepository.findAll();
+
         for (Doctor doctor : doctors) {
             List<AppointmentOutput> outputs = new ArrayList<>();
             List<Appointment> doctorAppointments = appointmentRepository.findByEmployeeCode(doctor.getCode());
+
             for (Appointment appointment : doctorAppointments) {
                 outputs.add(AppointmentOutput.getAppointmentOutput(appointment));
             }
-            employeeAppointments.put(DoctorOutput.getDoctorOutput(doctor), outputs);
+
+            //outputs.sort(Comparator.comparing(AppointmentOutput::getTimeSchedule));
+            busiestDoctor.put(DoctorOutput.getDoctorOutput(doctor).getName(), outputs);
         }
-        return employeeAppointments;
+        return busiestDoctor;
     }
 }

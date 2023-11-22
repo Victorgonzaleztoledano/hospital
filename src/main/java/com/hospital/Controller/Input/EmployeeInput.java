@@ -32,5 +32,4 @@ public abstract class EmployeeInput {
     private LocalTime workingTime;
     @NotNull
     private LocalTime endWorkingTime;
-
 }

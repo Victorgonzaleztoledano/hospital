@@ -44,7 +44,7 @@ public class DoctorController {
     }
 
     @GetMapping("/{code}/schedule")
-    public ResponseEntity<TreeMap<LocalDate, List<LocalTime>>> listAvalibleAppointments(@PathVariable String code) {
+    public ResponseEntity<TreeMap<LocalDate, List<LocalTime>>> listTimeAvalible(@PathVariable String code) {
         try {
             TreeMap<LocalDate, List<LocalTime>> appointments = doctorService.listAvailibleAppointments(code);
             return ResponseEntity.ok(appointments);
@@ -65,7 +65,7 @@ public class DoctorController {
     }
 
     @GetMapping("/{code}/appointments")
-    public ResponseEntity<List<AppointmentOutput>> getPatients(@PathVariable String code) {
+    public ResponseEntity<List<AppointmentOutput>> getAppointments(@PathVariable String code) {
         try {
             return ResponseEntity.ok(doctorService.listAppointmentsByCode(code));
         } catch (EmployeeNotExistsException e) {

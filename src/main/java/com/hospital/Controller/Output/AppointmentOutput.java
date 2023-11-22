@@ -18,6 +18,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppointmentOutput {
+    @NotNull
     private String id;
 
     @NotNull(message = "Day can not be null")

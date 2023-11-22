@@ -40,10 +40,4 @@ public abstract class EmployeeOutput {
     private LocalTime workingTime;
     @NotNull
     private LocalTime endWorkingTime;
-
-    @Override
-    public String toString() {
-        return "name='" + name + '\'' +
-                ", code=" + code;
-    }
 }
