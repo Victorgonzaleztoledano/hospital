@@ -6,5 +6,3 @@ CREATE TABLE appointments (
     employee_code CHAR(36) NOT NULL,
     PRIMARY KEY (id)
 );
-
-

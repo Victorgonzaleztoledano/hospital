@@ -3,9 +3,11 @@ package com.hospital.Service;
 import com.hospital.Controller.Input.DoctorInput;
 import com.hospital.Controller.Output.AppointmentOutput;
 import com.hospital.Controller.Output.DoctorOutput;
+import com.hospital.Domain.Appointment;
 import com.hospital.Domain.Doctor;
 
 import com.hospital.Exception.*;
+import com.hospital.Repository.AppointmentRepository;
 import com.hospital.Repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -22,6 +25,8 @@ public class DoctorService {
     private CommonService commonService;
     @Autowired
     private DoctorRepository doctorRepository;
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
     //Agrego un doctor
     public void addDoctor(DoctorInput doctorInput) throws DniAlreadyExistsException {
@@ -58,5 +63,24 @@ public class DoctorService {
     //Imprime las citas de un empleado a través de su codigo de empleado
     public List<AppointmentOutput> listAppointmentsByCode(String code) throws EmployeeNotExistsException  {
         return commonService.listAppointmentsByCode(code);
+    }
+
+    ////////////FALTA QUE LO ORDENE POR MÁS OCUPADO//////////
+    public TreeMap<DoctorOutput, List<AppointmentOutput>> getBusiestDoctors() throws EmployeeNotExistsException {
+        List<Doctor> allDoctors = doctorRepository.findAll();
+        TreeMap<DoctorOutput, List<AppointmentOutput>> busiestDoctor = new TreeMap<>(
+                Comparator.comparing(doctor -> DoctorOutput.getDoctorOutput((Doctor) doctor).getName()).reversed()
+        );
+
+        for (Doctor doctor : allDoctors) {
+            DoctorOutput doctorOutput = DoctorOutput.getDoctorOutput(doctor);
+
+            List<AppointmentOutput> allAppointmentOutput = listAppointmentsByCode(doctor.getCode());
+
+            allAppointmentOutput.sort(Comparator.comparing(AppointmentOutput::getTimeAppointment));
+
+            busiestDoctor.put(doctorOutput, allAppointmentOutput);
+        }
+        return busiestDoctor;
     }
 }

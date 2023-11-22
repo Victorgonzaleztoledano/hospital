@@ -58,9 +58,4 @@ public class AppointmentController {
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping("/doctors")
-    public ResponseEntity<TreeMap<DoctorOutput, List<AppointmentOutput>>> listOcupedDoctors() {
-        TreeMap<DoctorOutput, List<AppointmentOutput>> lists = appointmentService.mostScheduledDoctors();
-        return ResponseEntity.ok(lists);
-    }
 }

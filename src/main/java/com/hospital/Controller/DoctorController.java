@@ -63,12 +63,22 @@ public class DoctorController {
             return ResponseEntity.notFound().build();
         }
     }
-
     @GetMapping("/{code}/appointments")
     public ResponseEntity<List<AppointmentOutput>> getAppointments(@PathVariable String code) {
         try {
             return ResponseEntity.ok(doctorService.listAppointmentsByCode(code));
         } catch (EmployeeNotExistsException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/ordered")
+    public ResponseEntity<TreeMap<DoctorOutput, List<AppointmentOutput>>> getBusiestDoctors(){
+        try{
+            TreeMap<DoctorOutput, List<AppointmentOutput>> busiest = doctorService.getBusiestDoctors();
+            return ResponseEntity.ok(busiest);
+        }
+        catch (EmployeeNotExistsException e){
             System.out.println(e.getMessage());
             return ResponseEntity.notFound().build();
         }
