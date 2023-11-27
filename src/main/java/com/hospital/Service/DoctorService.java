@@ -62,7 +62,7 @@ public class DoctorService {
     public List<AppointmentOutput> listAppointmentsByCode(String code) throws EmployeeNotExistsException  {
         return commonService.listAppointmentsByCode(code);
     }
-    
+    //Ordena los doctores por más ocupados
     public TreeMap<String, List<AppointmentOutput>> ordered() {
         List<Doctor> doctors = doctorRepository.findAll();
         TreeMap<String, List<AppointmentOutput>> ordered = new TreeMap<>(Collections.reverseOrder());
