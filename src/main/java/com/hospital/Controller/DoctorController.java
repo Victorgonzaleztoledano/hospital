@@ -53,6 +53,7 @@ public class DoctorController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @GetMapping("/{code}/schedule/{date}")
     public ResponseEntity<List<LocalTime>> listDateAvalibleAppointments(@PathVariable String code, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         try {
@@ -63,6 +64,7 @@ public class DoctorController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @GetMapping("/{code}/appointments")
     public ResponseEntity<List<AppointmentOutput>> getAppointments(@PathVariable String code) {
         try {
@@ -72,15 +74,10 @@ public class DoctorController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @GetMapping("/ordered")
-    public ResponseEntity<TreeMap<String, List<AppointmentOutput>>> getBusiestDoctors(){
-        try{
-            TreeMap<String, List<AppointmentOutput>> busiest = doctorService.getBusiestDoctors();
-            return ResponseEntity.ok(busiest);
-        }
-        catch (EmployeeNotExistsException e){
-            System.out.println(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<TreeMap<String, List<AppointmentOutput>>> getBusiestDoctors() {
+        TreeMap<String, List<AppointmentOutput>> busiest = doctorService.ordered();
+        return ResponseEntity.ok(busiest);
     }
 }
