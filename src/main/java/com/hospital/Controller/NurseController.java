@@ -20,8 +20,11 @@ import java.util.TreeMap;
 
 @RestController
 public class NurseController {
-    @Autowired
     private NurseService nurseService;
+    @Autowired
+    public NurseController(NurseService nurseService) {
+        this.nurseService = nurseService;
+    }
 
     @GetMapping
     public ResponseEntity<List<NurseOutput>> getNurses() {

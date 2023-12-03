@@ -17,8 +17,11 @@ import java.util.List;
 
 @RestController
 public class PatientController {
-    @Autowired
     private PatientService patientService;
+    @Autowired
+    public PatientController(PatientService patientService) {
+        this.patientService = patientService;
+    }
 
     @GetMapping
     public ResponseEntity<List<PatientOutput>> getPatients() {
@@ -36,6 +39,7 @@ public class PatientController {
             patientService.addPatient(patientInput);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (DniAlreadyExistsException e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED).body(e.getMessage());
         }
     }

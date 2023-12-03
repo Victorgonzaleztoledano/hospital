@@ -21,14 +21,17 @@ import java.util.TreeMap;
 
 @Service
 public class CommonService {
-    @Autowired
     private PatientRepository patientRepository;
-    @Autowired
     private DoctorRepository doctorRepository;
-    @Autowired
     private NurseRepository nurseRepository;
-    @Autowired
     private AppointmentRepository appointmentRepository;
+    @Autowired
+    public CommonService(PatientRepository patientRepository, DoctorRepository doctorRepository, NurseRepository nurseRepository, AppointmentRepository appointmentRepository) {
+        this.patientRepository = patientRepository;
+        this.doctorRepository = doctorRepository;
+        this.nurseRepository = nurseRepository;
+        this.appointmentRepository = appointmentRepository;
+    }
 
     public boolean comprobateDni(String dni) {
         if (patientRepository.existsById(dni)) return true;

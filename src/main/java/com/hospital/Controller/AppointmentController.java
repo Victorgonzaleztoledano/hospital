@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.TreeMap;
 @RequestMapping("/appointments")
 
 @RestController
 public class AppointmentController {
-    @Autowired
+
     private AppointmentService appointmentService;
+    @Autowired
+    public AppointmentController(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
+    }
 
     @GetMapping
     public ResponseEntity<List<AppointmentOutput>> listAppointments() {

@@ -19,12 +19,15 @@ import java.util.*;
 
 @Service
 public class DoctorService {
-    @Autowired
     private CommonService commonService;
-    @Autowired
     private DoctorRepository doctorRepository;
-    @Autowired
     private AppointmentRepository appointmentRepository;
+    @Autowired
+    public DoctorService(CommonService commonService, DoctorRepository doctorRepository, AppointmentRepository appointmentRepository) {
+        this.commonService = commonService;
+        this.doctorRepository = doctorRepository;
+        this.appointmentRepository = appointmentRepository;
+    }
 
     //Agrego un doctor
     public void addDoctor(DoctorInput doctorInput) throws DniAlreadyExistsException {

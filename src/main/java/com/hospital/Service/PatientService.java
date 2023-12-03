@@ -17,12 +17,16 @@ import java.util.List;
 
 @Service
 public class PatientService {
-    @Autowired
     private CommonService commonService;
-    @Autowired
     private PatientRepository patientRepository;
-    @Autowired
     private AppointmentRepository appointmentRepository;
+    @Autowired
+    public PatientService(CommonService commonService, PatientRepository patientRepository, AppointmentRepository appointmentRepository) {
+        this.commonService = commonService;
+        this.patientRepository = patientRepository;
+        this.appointmentRepository = appointmentRepository;
+    }
+
 
     //Agregar paciente
     public void addPatient(PatientInput patientInput) throws DniAlreadyExistsException {

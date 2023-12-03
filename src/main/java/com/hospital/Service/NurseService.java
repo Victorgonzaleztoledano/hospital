@@ -18,12 +18,15 @@ import java.util.TreeMap;
 
 @Service
 public class NurseService {
-    @Autowired
     private AppointmentRepository appointmentRepository;
-    @Autowired
     private NurseRepository nurseRepository;
-    @Autowired
     private CommonService commonService;
+    @Autowired
+    public NurseService(AppointmentRepository appointmentRepository, NurseRepository nurseRepository, CommonService commonService) {
+        this.appointmentRepository = appointmentRepository;
+        this.nurseRepository = nurseRepository;
+        this.commonService = commonService;
+    }
 
     //Agrega un enfermero
     public void addNurse(NurseInput nurseInput) throws DniAlreadyExistsException {

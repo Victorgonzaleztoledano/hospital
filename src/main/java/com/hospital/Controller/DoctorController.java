@@ -20,8 +20,11 @@ import java.util.TreeMap;
 @RequestMapping("/doctors")
 @RestController
 public class DoctorController {
-    @Autowired
     private DoctorService doctorService;
+    @Autowired
+    public DoctorController(DoctorService doctorService) {
+        this.doctorService = doctorService;
+    }
 
     @GetMapping
     public ResponseEntity<List<DoctorOutput>> getDoctors() {

@@ -18,18 +18,21 @@ import java.util.*;
 
 @Service
 public class AppointmentService {
-    @Autowired
     private NurseRepository nurseRepository;
-    @Autowired
     private DoctorRepository doctorRepository;
-    @Autowired
     private AppointmentRepository appointmentRepository;
-    @Autowired
     private CommonService commonService;
-    @Autowired
     private DoctorService doctorService;
-    @Autowired
     private NurseService nurseService;
+    @Autowired
+    public AppointmentService(NurseRepository nurseRepository, DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, CommonService commonService, DoctorService doctorService, NurseService nurseService) {
+        this.nurseRepository = nurseRepository;
+        this.doctorRepository = doctorRepository;
+        this.appointmentRepository = appointmentRepository;
+        this.commonService = commonService;
+        this.doctorService = doctorService;
+        this.nurseService = nurseService;
+    }
 
     //Me crea la cita comprobando que no haya repetido y que todo exista
     public void addAppointment(AppointmentInput a) throws EmployeeNotExistsException, DoctorNotExistsException, NurseNotExistsException, WrongTimeException, WrongDateException, PatientNotFoundException, AppointmentAlreadyExistsException {
