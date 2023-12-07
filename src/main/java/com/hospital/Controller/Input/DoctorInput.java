@@ -15,5 +15,4 @@ public class DoctorInput extends EmployeeInput {
     @Min(value = 0, message = "Experience can not be negative")
     @Max(value = 50, message = "Experience must be consistent")
     private int experience;
-
 }

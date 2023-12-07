@@ -23,6 +23,6 @@ public class Nurse extends Employee{
     }
 
     public static Nurse getNurse(NurseInput nurseInput) {
-        return new Nurse(nurseInput.getDni(), nurseInput.getAddress(), nurseInput.getName(), nurseInput.getWorkingTime(), nurseInput.getEndWorkingTime());
+        return new Nurse(nurseInput.getDni(), nurseInput.getAddress(), nurseInput.getName(),nurseInput.getWorkingTime(), nurseInput.getEndWorkingTime());
     }
 }

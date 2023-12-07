@@ -29,10 +29,11 @@ public class NurseService {
     }
 
     //Agrega un enfermero
-    public void addNurse(NurseInput nurseInput) throws DniAlreadyExistsException {
+    public NurseOutput addNurse(NurseInput nurseInput) throws DniAlreadyExistsException {
         if (!commonService.comprobateDni(nurseInput.getDni())) {
             Nurse nurse = Nurse.getNurse(nurseInput);
             nurseRepository.save(nurse);
+            return NurseOutput.getNurseOutput(nurse);
         } else throw new DniAlreadyExistsException("Dni is already registered");
     }
 

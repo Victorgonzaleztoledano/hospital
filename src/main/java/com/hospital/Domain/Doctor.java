@@ -27,6 +27,7 @@ public class Doctor extends Employee{
     }
 
     public static Doctor getDoctor(DoctorInput doctorInput) {
-        return new Doctor(doctorInput.getDni(), doctorInput.getAddress(), doctorInput.getName(), doctorInput.getWorkingTime(), doctorInput.getEndWorkingTime(), doctorInput.getExperience());
+        return new Doctor(doctorInput.getDni(), doctorInput.getAddress(), doctorInput.getName(), doctorInput.getWorkingTime(), doctorInput.getEndWorkingTime(),
+                doctorInput.getExperience());
     }
 }

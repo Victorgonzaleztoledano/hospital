@@ -1,6 +1,7 @@
 package com.hospital.Domain;
 
 import com.hospital.Controller.Input.AppointmentInput;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -48,6 +49,7 @@ public class Appointment {
 
     public static Appointment getAppointment(AppointmentInput appointmentInput){
         return new Appointment(appointmentInput.getDateAppointment(),
-                appointmentInput.getTimeAppointment(), appointmentInput.getDniPatient(), appointmentInput.getCodeEmployee());
+                appointmentInput.getTimeAppointment(),
+                appointmentInput.getDniPatient(), appointmentInput.getCodeEmployee());
     }
 }

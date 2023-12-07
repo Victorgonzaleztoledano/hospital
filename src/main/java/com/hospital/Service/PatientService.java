@@ -27,12 +27,12 @@ public class PatientService {
         this.appointmentRepository = appointmentRepository;
     }
 
-
     //Agregar paciente
-    public void addPatient(PatientInput patientInput) throws DniAlreadyExistsException {
+    public PatientOutput addPatient(PatientInput patientInput) throws DniAlreadyExistsException {
         if(!commonService.comprobateDni(patientInput.getDni())) {
             Patient patient = Patient.getPatient(patientInput);
             patientRepository.save(patient);
+            return PatientOutput.getPatientOutput(patient);
         }
         else throw new DniAlreadyExistsException("Dni is already registered");
     }

@@ -5,6 +5,7 @@ import com.hospital.Controller.Output.AppointmentOutput;
 import com.hospital.Controller.Output.DoctorOutput;
 import com.hospital.Exception.*;
 import com.hospital.Service.DoctorService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -18,69 +19,50 @@ import java.util.List;
 import java.util.TreeMap;
 
 @RequestMapping("/doctors")
+@Slf4j
 @RestController
 public class DoctorController {
     private DoctorService doctorService;
+
     @Autowired
     public DoctorController(DoctorService doctorService) {
         this.doctorService = doctorService;
     }
 
     @GetMapping
-    public ResponseEntity<List<DoctorOutput>> getDoctors() {
-        try {
-            return ResponseEntity.ok(doctorService.listDoctors());
-        } catch (EmptyListException e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public List<DoctorOutput> getDoctors() throws EmptyListException {
+        log.info("Doctors to be listed:");
+        return this.doctorService.listDoctors();
     }
 
     @PostMapping
-    public ResponseEntity addDoctor(@Valid @RequestBody DoctorInput doctorInput) {
-        try {
-            doctorService.addDoctor(doctorInput);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (DniAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    public DoctorOutput addDoctor(@Valid @RequestBody DoctorInput doctorInput) throws DniAlreadyExistsException {
+        DoctorOutput doctor = doctorService.addDoctor(doctorInput);
+        log.info("Doctor to be saved: {}", doctor);
+        return doctor;
     }
 
     @GetMapping("/{code}/schedule")
-    public ResponseEntity<TreeMap<LocalDate, List<LocalTime>>> listTimeAvalible(@PathVariable String code) {
-        try {
-            TreeMap<LocalDate, List<LocalTime>> appointments = doctorService.listAvailibleAppointments(code);
-            return ResponseEntity.ok(appointments);
-        } catch (DoctorNotExistsException e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+    public TreeMap<LocalDate, List<LocalTime>> listTimeAvalible(@PathVariable String code) throws DoctorNotExistsException {
+        log.info("Doctor schedule to be listed:");
+        return this.doctorService.listAvailibleAppointments(code);
     }
 
     @GetMapping("/{code}/schedule/{date}")
-    public ResponseEntity<List<LocalTime>> listDateAvalibleAppointments(@PathVariable String code, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        try {
-            List<LocalTime> appointments = doctorService.listTimeAvailable(code, date);
-            return ResponseEntity.ok(appointments);
-        } catch (DoctorNotExistsException e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+    public List<LocalTime> listDateAvalibleAppointments(@PathVariable String code, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) throws DoctorNotExistsException {
+        log.info("Doctor times of schedule availible:");
+        return this.doctorService.listTimeAvailable(code, date);
     }
 
     @GetMapping("/{code}/appointments")
-    public ResponseEntity<List<AppointmentOutput>> getAppointments(@PathVariable String code) {
-        try {
-            return ResponseEntity.ok(doctorService.listAppointmentsByCode(code));
-        } catch (EmployeeNotExistsException e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.notFound().build();
-        }
+    public List<AppointmentOutput> getAppointments(@PathVariable String code) throws EmployeeNotExistsException {
+        log.info("Doctor appointments to be listed:");
+        return this.doctorService.listAppointmentsByCode(code);
     }
 
     @GetMapping("/ordered")
-    public ResponseEntity<TreeMap<String, List<AppointmentOutput>>> getBusiestDoctors() {
-        TreeMap<String, List<AppointmentOutput>> busiest = doctorService.ordered();
-        return ResponseEntity.ok(busiest);
+    public TreeMap<String, List<AppointmentOutput>> getBusiestDoctors() {
+        log.info("Doctors ordered to be listed:");
+        return this.doctorService.ordered();
     }
 }

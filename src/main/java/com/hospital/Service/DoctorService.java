@@ -30,13 +30,15 @@ public class DoctorService {
     }
 
     //Agrego un doctor
-    public void addDoctor(DoctorInput doctorInput) throws DniAlreadyExistsException {
+    public DoctorOutput addDoctor(DoctorInput doctorInput) throws DniAlreadyExistsException {
         if(!commonService.comprobateDni(doctorInput.getDni())) {
             Doctor doctor = Doctor.getDoctor(doctorInput);
             doctorRepository.save(doctor);
+            return DoctorOutput.getDoctorOutput(doctor);
         }
         else throw new DniAlreadyExistsException("Dni is already registered");
     }
+
     //Listo todos los doctores del repositorio
     public List<DoctorOutput> listDoctors() throws EmptyListException {
         List<Doctor> doctors = doctorRepository.findAll();
@@ -47,6 +49,7 @@ public class DoctorService {
         }
         return doctorOutputs;
     }
+
     //Listado de horas disponibles de un médico y día
     public List<LocalTime> listTimeAvailable(String code, LocalDate date) throws DoctorNotExistsException {
         Doctor doctor = doctorRepository.findByCode(code);

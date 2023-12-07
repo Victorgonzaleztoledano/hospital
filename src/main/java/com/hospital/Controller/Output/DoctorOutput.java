@@ -4,6 +4,7 @@ import com.hospital.Domain.Doctor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.*;
 import java.time.LocalTime;
@@ -11,6 +12,7 @@ import java.time.LocalTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class DoctorOutput extends EmployeeOutput {
     @Min(value = 0, message = "Experience can not be negative")
     @Max(value = 50, message = "Experience must be consistent")

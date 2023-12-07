@@ -24,6 +24,7 @@ public class AppointmentService {
     private CommonService commonService;
     private DoctorService doctorService;
     private NurseService nurseService;
+
     @Autowired
     public AppointmentService(NurseRepository nurseRepository, DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, CommonService commonService, DoctorService doctorService, NurseService nurseService) {
         this.nurseRepository = nurseRepository;
@@ -35,32 +36,43 @@ public class AppointmentService {
     }
 
     //Me crea la cita comprobando que no haya repetido y que todo exista
-    public void addAppointment(AppointmentInput a) throws EmployeeNotExistsException, DoctorNotExistsException, NurseNotExistsException, WrongTimeException, WrongDateException, PatientNotFoundException, AppointmentAlreadyExistsException {
-        if (!appointmentRepository.existsByDniPatientAndDateAppointmentAndTimeAppointment(a.getDniPatient(), a.getDateAppointment(), a.getTimeAppointment())) {//Comprueba que no exista una cita igual
+    public AppointmentOutput addAppointment(AppointmentInput a) throws EmployeeNotExistsException, DoctorNotExistsException, NurseNotExistsException, WrongTimeException, WrongDateException, PatientNotFoundException, AppointmentAlreadyExistsException {
+        //Comprueba que no exista una cita igual
+        boolean appointmentAlreadyExists = appointmentRepository.existsByDniPatientAndDateAppointmentAndTimeAppointment(a.getDniPatient(), a.getDateAppointment(), a.getTimeAppointment());
 
-            if (commonService.comprobateDni(a.getDniPatient())) {  // y que el dni exista
+        //y que el dni exista
+        boolean patientDniExists = commonService.comprobateDni(a.getDniPatient());
 
-                TreeMap<LocalDate, List<LocalTime>> schedule = getTimeSchedule(a.getCodeEmployee());
-                if (schedule.containsKey(a.getDateAppointment())) { //Compruebo que el día es correcto
-                    List<LocalTime> timeAvailible = schedule.get(a.getDateAppointment()); //Saco las horas del día
+        if (appointmentAlreadyExists) throw new AppointmentAlreadyExistsException("Patient already has an appointment");
+        if (!patientDniExists) throw new PatientNotFoundException("Patient not found");
 
-                    boolean created = saveAppointment(timeAvailible, a); //Si dentro del método devuelve false lanzo excepción
-                    if (created != true) throw new WrongTimeException("Time of schedule can not be registered");
+        //Saco el horario de cada día del empleado
+        TreeMap<LocalDate, List<LocalTime>> schedule = getTimeSchedule(a.getCodeEmployee());
 
-                } else throw new WrongDateException("Date can not be registered");
-            } else throw new PatientNotFoundException("Patient not found");
-        } else throw new AppointmentAlreadyExistsException("Patient already has an appointment");
+        //Compruebo que el día está disponible
+        if (!schedule.containsKey(a.getDateAppointment())) throw new WrongDateException("Date can not be registered");
+
+        //Saco las horas del día en concreto
+        List<LocalTime> timeAvailible = schedule.get(a.getDateAppointment());
+
+        //Compruebo si coincide la hora de la cita con las disponibles
+        Appointment appointmentSave = saveAppointment(timeAvailible, a);
+        if (appointmentSave == null) throw new WrongTimeException("Time of schedule can not be registered");
+
+        return AppointmentOutput.getAppointmentOutput(appointmentSave);
     }
 
     //Guardar la cita
-    private boolean saveAppointment(List<LocalTime> time, AppointmentInput a) {
-        for (LocalTime times : time) { //Compruebo que la hora de la cita esté entre las disponibles
+    private Appointment saveAppointment(List<LocalTime> time, AppointmentInput a) {
+        //Compruebo que la hora de la cita esté entre las disponibles
+        for (LocalTime times : time) {
             if (times.equals(a.getTimeAppointment())) {
-                appointmentRepository.save(Appointment.getAppointment(a));
-                return true; // Si se crea da verdadero
+                Appointment appointment = Appointment.getAppointment(a);
+                appointmentRepository.save(appointment);
+                return appointment;
             }
         }
-        return false;
+        return null;
     }
 
     //Obtengo el horario del empleado

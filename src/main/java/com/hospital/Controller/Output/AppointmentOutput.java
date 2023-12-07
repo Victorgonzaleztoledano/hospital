@@ -1,10 +1,8 @@
 package com.hospital.Controller.Output;
 
+import com.hospital.Controller.Input.AppointmentInput;
 import com.hospital.Domain.Appointment;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -15,6 +13,7 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppointmentOutput {
