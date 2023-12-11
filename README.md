@@ -18,7 +18,7 @@ http://localhost:8080/swagger-ui/index.html
 ### ALTAS
 
 A continuación voy a dejar un listado de métodos POST y como implementarlos para poder registrar datos en la aplicación.
-###### Pacientes
+#### Pacientes
 ~~~
 POST  http://localhost:8080/patients
 ~~~
@@ -33,7 +33,7 @@ Para el endpoint en el que damos de alta un paciente podemos utilizar el siguien
 ~~~
 Existen excepciones que impiden al cliente crear un DNI que no tenga el formato estandar de 8 dígitos y 1 letra mayúscula al final. Como para el nombre que no podrá registrar un nombre que contenga números o caracteres especiales.
 
-###### Enfermer@s
+#### Enfermer@s
 Para los enfermer@s usaremos este endpoint en el que llamaremos al método POST para agregar un enfermer@
 
 ~~~
@@ -51,7 +51,7 @@ Los empleados tienen su ventana de trabajo que será designada a la hora de su c
 ~~~
 Existen restricciones a la hora de crear enfermer@s con datos incoherentes igual que comentaba con los pacientes. Con este JSON podrás crear un enfermer@ sin problemas.
 
-###### Médic@s
+#### Médic@s
 
 Igual que para los enfermer@s utilizaremos un método POST pero usando doctors como keyword.
 ~~~
@@ -70,7 +70,7 @@ La particularidad de los médic@s es que para ellos necesitaremos agregar la exp
 ~~~
 Por supuesto cuenta con excepciones para evitar que la experiencia sea negativa o se agregue con datos incorrectos.
 
-###### Citas médicas
+#### Citas médicas
 
 Para poder dar de alta una cita médica necesitaremos tener dado de alta como mínimo un paciente para poder registrar esa cita a ese paciente mediante su DNI y un empleado ya sea enfermer@ o médic@ del cual usaremos su código de empleado que se genera automáticamente mediante un UUID. Podrá solicitar el código de empleado mediante el método GET del empleado que necesite consultar. Para dar de alta una cita usaremos este método POST:
 
