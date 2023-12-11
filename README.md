@@ -15,7 +15,7 @@ La API está documentada con swagger y se podrán realizar llamadas mediante sus
 http://localhost:8080/swagger-ui/index.html
 ~~~
 
-#### ALTAS
+### ALTAS
 
 A continuación voy a dejar un listado de métodos POST y como implementarlos para poder registrar datos en la aplicación.
 ###### Pacientes
