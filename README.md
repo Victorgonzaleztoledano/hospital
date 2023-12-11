@@ -20,7 +20,7 @@ http://localhost:8080/swagger-ui/index.html
 A continuación voy a dejar un listado de métodos POST y como implementarlos para poder registrar datos en la aplicación.
 ###### Pacientes
 ~~~
-**POST **  http://localhost:8080/patients
+POST  http://localhost:8080/patients
 ~~~
 Para el endpoint en el que damos de alta un paciente podemos utilizar el siguiente ejemplo en formato JSON:
 
@@ -37,7 +37,7 @@ Existen excepciones que impiden al cliente crear un DNI que no tenga el formato 
 Para los enfermer@s usaremos este endpoint en el que llamaremos al método POST para agregar un enfermer@
 
 ~~~
-**POST **  http://localhost:8080/nurses
+POST  http://localhost:8080/nurses
 ~~~
 Los empleados tienen su ventana de trabajo que será designada a la hora de su creación. Tendrá su hora de entrada y de salida y para ello utilizaremos un JSON como este ejemplo:
 ~~~
@@ -55,7 +55,7 @@ Existen restricciones a la hora de crear enfermer@s con datos incoherentes igual
 
 Igual que para los enfermer@s utilizaremos un método POST pero usando doctors como keyword.
 ~~~
-**POST **  http://localhost:8080/doctors
+POST  http://localhost:8080/doctors
 ~~~
 La particularidad de los médic@s es que para ellos necesitaremos agregar la experiencia a la hora de agregar uno a la base de datos.
 ~~~
@@ -75,7 +75,7 @@ Por supuesto cuenta con excepciones para evitar que la experiencia sea negativa 
 Para poder dar de alta una cita médica necesitaremos tener dado de alta como mínimo un paciente para poder registrar esa cita a ese paciente mediante su DNI y un empleado ya sea enfermer@ o médic@ del cual usaremos su código de empleado que se genera automáticamente mediante un UUID. Podrá solicitar el código de empleado mediante el método GET del empleado que necesite consultar. Para dar de alta una cita usaremos este método POST:
 
 ~~~
-**POST **  http://localhost:8080/appointments
+POST  http://localhost:8080/appointments
 ~~~
 Recordemos que para dar de alta una cita necesitamos que el día sea uno de la semana siguiente a la semana en curso. Necesitaremos el código de empleado de un empleado y conocer la ventana de trabajo de ese empleado que previamente habremos visualizado y somos conocedores para escoger una hora disponible para esa cita. Un ejemplo de código en formato JSON para el cuerpo de la cita sería:
 
@@ -93,12 +93,12 @@ Si en algún momento introduce un dato que no exista o no esté disponible será
 
 A continuación dejo algún ejemplo de otras funcionalidades que tiene la aplicación. Esto es solo una muestra si quieres saber más puedes indagar más profundo en la aplicación.
 ~~~
-**GET**   http://localhost:8080/nurses/bee4e218-484e-4a46-a9b7-1099eb9372bf/schedule
+GET   http://localhost:8080/nurses/bee4e218-484e-4a46-a9b7-1099eb9372bf/schedule
 ~~~
 Con este método podremos comprobar la ventana de trabajo de un empleado en concreto cuyo código de empleado sería formato UUID para evitar repetidos.
 
 ~~~
-**GET**   http://localhost:8080/nurses/bee4e218-484e-4a46-a9b7-1099eb9372bf/appointments
+GET   http://localhost:8080/nurses/bee4e218-484e-4a46-a9b7-1099eb9372bf/appointments
 ~~~
 En este método GET podemos comprobar las citas que tiene asignadas un empleado ordenadas por fecha de más próxima a más lejana.
 
