@@ -10,7 +10,7 @@ Estas son algunas cosas que implementa mi backend:
 
 ### Documentación
 
-La API está documentada con swagger y se podrán realizar llamadas mediante sus endpoints.Para poder correrla solo necesita iniciar el proyecto y usar colocar en su navegador:
+La API está documentada con swagger y se podrán realizar llamadas mediante sus endpoints. Para poder correrla solo necesita iniciar el proyecto y usar colocar en su navegador:
 ~~~
 http://localhost:8080/swagger-ui/index.html
 ~~~
