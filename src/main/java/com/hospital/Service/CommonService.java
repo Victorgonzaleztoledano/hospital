@@ -7,6 +7,7 @@ import com.hospital.Repository.AppointmentRepository;
 import com.hospital.Repository.DoctorRepository;
 import com.hospital.Repository.NurseRepository;
 import com.hospital.Repository.PatientRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +21,13 @@ import java.util.List;
 import java.util.TreeMap;
 
 @Service
+@RequiredArgsConstructor
 public class CommonService {
-    private PatientRepository patientRepository;
-    private DoctorRepository doctorRepository;
-    private NurseRepository nurseRepository;
-    private AppointmentRepository appointmentRepository;
-    @Autowired
-    public CommonService(PatientRepository patientRepository, DoctorRepository doctorRepository, NurseRepository nurseRepository, AppointmentRepository appointmentRepository) {
-        this.patientRepository = patientRepository;
-        this.doctorRepository = doctorRepository;
-        this.nurseRepository = nurseRepository;
-        this.appointmentRepository = appointmentRepository;
-    }
+
+    private final PatientRepository patientRepository;
+    private final DoctorRepository doctorRepository;
+    private final NurseRepository nurseRepository;
+    private final AppointmentRepository appointmentRepository;
 
     public boolean comprobateDni(String dni) {
         if (patientRepository.existsById(dni)) return true;

@@ -21,7 +21,7 @@ import java.util.UUID;
 @DiscriminatorValue("employees")
 public abstract class Employee extends Person{
 
-    private String code = String.valueOf(UUID.randomUUID());
+    private String code;
     @NotNull
     private LocalTime workingTime;
     @NotNull
@@ -33,6 +33,18 @@ public abstract class Employee extends Person{
                     @NotNull(message = "Name can not be null") @NotBlank(message = "Name can not be empty")
                     @Pattern(regexp = "^[a-zA-Z]*$", message = "Name can not contains numbers") String name, LocalTime workingTime, LocalTime endWorkingTime) {
         super(dni, address, name);
+        this.code  = String.valueOf(UUID.randomUUID());
+        this.workingTime = workingTime;
+        this.endWorkingTime = endWorkingTime;
+    }
+
+    public Employee(@NotNull(message = "Dni can not be null") @NotBlank(message = "Dni can not be empty")
+                    @Pattern(regexp = "^[0-9]{8}[A-Z]$", message = "Invalid dni format. Must be 8 numbers followed by a letter")
+                    String dni, @NotNull(message = "Address can not be null") @NotBlank(message = "Address can not be empty")
+    String address, @NotNull(message = "Name can not be null") @NotBlank(message = "Name can not be empty")
+    @Pattern(regexp = "^[a-zA-Z]*$", message = "Name can not contains numbers") String name, String code, LocalTime workingTime, LocalTime endWorkingTime) {
+        super(dni, address, name);
+        this.code = code;
         this.workingTime = workingTime;
         this.endWorkingTime = endWorkingTime;
     }

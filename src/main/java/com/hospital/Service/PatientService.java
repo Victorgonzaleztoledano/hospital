@@ -8,6 +8,7 @@ import com.hospital.Domain.Patient;
 import com.hospital.Exception.*;
 import com.hospital.Repository.AppointmentRepository;
 import com.hospital.Repository.PatientRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,16 +17,12 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PatientService {
-    private CommonService commonService;
-    private PatientRepository patientRepository;
-    private AppointmentRepository appointmentRepository;
-    @Autowired
-    public PatientService(CommonService commonService, PatientRepository patientRepository, AppointmentRepository appointmentRepository) {
-        this.commonService = commonService;
-        this.patientRepository = patientRepository;
-        this.appointmentRepository = appointmentRepository;
-    }
+
+    private final PatientRepository patientRepository;
+    private final CommonService commonService;
+    private final AppointmentService appointmentService;
 
     //Agregar paciente
     public PatientOutput addPatient(PatientInput patientInput) throws DniAlreadyExistsException {
@@ -51,7 +48,7 @@ public class PatientService {
     //Lista las citas de un paciente
     public List<AppointmentOutput> listPatientAppointments(String dni) throws PatientNotFoundException {
         if (!patientRepository.existsById(dni)) throw new PatientNotFoundException("Dni does not exists");
-        List<Appointment> appointments = appointmentRepository.findByDniPatient(dni);
+        List<Appointment> appointments = appointmentService.findByDniPatient(dni);
         //Ordena por fecha y hora
         List<AppointmentOutput> sortedAppointments = new ArrayList<>();
         for (Appointment appointment : appointments) {

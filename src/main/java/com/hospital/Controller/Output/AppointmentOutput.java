@@ -1,6 +1,5 @@
 package com.hospital.Controller.Output;
 
-import com.hospital.Controller.Input.AppointmentInput;
 import com.hospital.Domain.Appointment;
 import lombok.*;
 

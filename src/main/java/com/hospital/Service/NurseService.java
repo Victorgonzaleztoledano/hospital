@@ -5,9 +5,8 @@ import com.hospital.Controller.Output.AppointmentOutput;
 import com.hospital.Controller.Output.NurseOutput;
 import com.hospital.Domain.Nurse;
 import com.hospital.Exception.*;
-import com.hospital.Repository.AppointmentRepository;
 import com.hospital.Repository.NurseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,16 +16,11 @@ import java.util.List;
 import java.util.TreeMap;
 
 @Service
+@RequiredArgsConstructor
 public class NurseService {
-    private AppointmentRepository appointmentRepository;
-    private NurseRepository nurseRepository;
-    private CommonService commonService;
-    @Autowired
-    public NurseService(AppointmentRepository appointmentRepository, NurseRepository nurseRepository, CommonService commonService) {
-        this.appointmentRepository = appointmentRepository;
-        this.nurseRepository = nurseRepository;
-        this.commonService = commonService;
-    }
+
+    private final NurseRepository nurseRepository;
+    private final CommonService commonService;
 
     //Agrega un enfermero
     public NurseOutput addNurse(NurseInput nurseInput) throws DniAlreadyExistsException {
@@ -65,5 +59,9 @@ public class NurseService {
     //Imprime las citas de un empleado a través de su codigo de empleado
     public List<AppointmentOutput> listAppointmentsByCode(String code) throws EmployeeNotExistsException {
         return commonService.listAppointmentsByCode(code);
+    }
+
+    public boolean existsByCode(String code){
+        return nurseRepository.existsByCode(code);
     }
 }

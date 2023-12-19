@@ -2,14 +2,10 @@ package com.hospital.Service;
 
 import com.hospital.Controller.Input.AppointmentInput;
 import com.hospital.Controller.Output.AppointmentOutput;
-import com.hospital.Controller.Output.DoctorOutput;
 import com.hospital.Domain.Appointment;
-import com.hospital.Domain.Doctor;
 import com.hospital.Exception.*;
 import com.hospital.Repository.AppointmentRepository;
-import com.hospital.Repository.DoctorRepository;
-import com.hospital.Repository.NurseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,23 +13,13 @@ import java.time.LocalTime;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class AppointmentService {
-    private NurseRepository nurseRepository;
-    private DoctorRepository doctorRepository;
-    private AppointmentRepository appointmentRepository;
-    private CommonService commonService;
-    private DoctorService doctorService;
-    private NurseService nurseService;
 
-    @Autowired
-    public AppointmentService(NurseRepository nurseRepository, DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, CommonService commonService, DoctorService doctorService, NurseService nurseService) {
-        this.nurseRepository = nurseRepository;
-        this.doctorRepository = doctorRepository;
-        this.appointmentRepository = appointmentRepository;
-        this.commonService = commonService;
-        this.doctorService = doctorService;
-        this.nurseService = nurseService;
-    }
+    private final AppointmentRepository appointmentRepository;
+    private final CommonService commonService;
+    private final DoctorService doctorService;
+    private final NurseService nurseService;
 
     //Me crea la cita comprobando que no haya repetido y que todo exista
     public AppointmentOutput addAppointment(AppointmentInput a) throws EmployeeNotExistsException, DoctorNotExistsException, NurseNotExistsException, WrongTimeException, WrongDateException, PatientNotFoundException, AppointmentAlreadyExistsException {
@@ -78,9 +64,9 @@ public class AppointmentService {
     //Obtengo el horario del empleado
     private TreeMap<LocalDate, List<LocalTime>> getTimeSchedule(String code) throws DoctorNotExistsException, NurseNotExistsException, EmployeeNotExistsException {
         TreeMap<LocalDate, List<LocalTime>> schedule;
-        if (doctorRepository.existsByCode(code)) {
+        if (doctorService.existsByCode(code)) {
             schedule = doctorService.listAvailibleAppointments(code);
-        } else if (nurseRepository.existsByCode(code)) {
+        } else if (nurseService.existsByCode(code)) {
             schedule = nurseService.listAvailibleAppointments(code);
         } else throw new EmployeeNotExistsException("Employee code not found");
         return schedule;
@@ -95,5 +81,13 @@ public class AppointmentService {
             appointmentOutputs.add(AppointmentOutput.getAppointmentOutput(appointment));
         }
         return appointmentOutputs;
+    }
+
+    public List<Appointment> findByEmployeeCode(String code){
+        return appointmentRepository.findByEmployeeCode(code);
+    }
+
+    public List<Appointment> findByDniPatient(String dni) {
+        return appointmentRepository.findByDniPatient(dni);
     }
 }

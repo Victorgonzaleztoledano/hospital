@@ -5,11 +5,11 @@ import com.hospital.Controller.Output.AppointmentOutput;
 import com.hospital.Controller.Output.DoctorOutput;
 import com.hospital.Exception.*;
 import com.hospital.Service.DoctorService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,13 +21,10 @@ import java.util.TreeMap;
 @RequestMapping("/doctors")
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 public class DoctorController {
-    private DoctorService doctorService;
+    private final DoctorService doctorService;
 
-    @Autowired
-    public DoctorController(DoctorService doctorService) {
-        this.doctorService = doctorService;
-    }
 
     @GetMapping
     public List<DoctorOutput> getDoctors() throws EmptyListException {
@@ -36,6 +33,7 @@ public class DoctorController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public DoctorOutput addDoctor(@Valid @RequestBody DoctorInput doctorInput) throws DniAlreadyExistsException {
         DoctorOutput doctor = doctorService.addDoctor(doctorInput);
         log.info("Doctor to be saved: {}", doctor);

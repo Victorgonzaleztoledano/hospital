@@ -22,6 +22,10 @@ public class Nurse extends Employee{
         super(dni, address, name, workingTime, endWorkingTime);
     }
 
+    public Nurse(String dni, String address, String name, String code, LocalTime workingTime, LocalTime endWorkingTime) {
+        super(dni, address, name, code, workingTime, endWorkingTime);
+    }
+
     public static Nurse getNurse(NurseInput nurseInput) {
         return new Nurse(nurseInput.getDni(), nurseInput.getAddress(), nurseInput.getName(),nurseInput.getWorkingTime(), nurseInput.getEndWorkingTime());
     }

@@ -1,7 +1,6 @@
 package com.hospital.Domain;
 
 import com.hospital.Controller.Input.AppointmentInput;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

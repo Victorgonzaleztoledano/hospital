@@ -10,6 +10,7 @@ import com.hospital.Domain.Doctor;
 import com.hospital.Exception.*;
 import com.hospital.Repository.AppointmentRepository;
 import com.hospital.Repository.DoctorRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +19,12 @@ import java.time.LocalTime;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class DoctorService {
-    private CommonService commonService;
-    private DoctorRepository doctorRepository;
-    private AppointmentRepository appointmentRepository;
-    @Autowired
-    public DoctorService(CommonService commonService, DoctorRepository doctorRepository, AppointmentRepository appointmentRepository) {
-        this.commonService = commonService;
-        this.doctorRepository = doctorRepository;
-        this.appointmentRepository = appointmentRepository;
-    }
+
+    private final CommonService commonService;
+    private final DoctorRepository doctorRepository;
+    private final AppointmentService appointmentService;
 
     //Agrego un doctor
     public DoctorOutput addDoctor(DoctorInput doctorInput) throws DniAlreadyExistsException {
@@ -76,7 +73,7 @@ public class DoctorService {
         for (Doctor doctor : doctors) {
             DoctorCodeOutPut doctorOutput = new DoctorCodeOutPut(doctor.getCode());
 
-            List<Appointment> appointments = appointmentRepository.findByEmployeeCode(doctor.getCode());
+            List<Appointment> appointments = appointmentService.findByEmployeeCode(doctor.getCode());
             List<AppointmentOutput> outPut = new ArrayList<>();
 
             for (Appointment appointment : appointments) {
@@ -89,5 +86,9 @@ public class DoctorService {
             ordered.put(doctorOutput.getCode(), outPut);
         }
         return ordered;
+    }
+
+    public boolean existsByCode(String code){
+        return doctorRepository.existsByCode(code);
     }
 }
