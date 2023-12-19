@@ -20,6 +20,7 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
 
+
     @GetMapping
     public List<AppointmentOutput> listAppointments() throws EmptyListException {
         log.info("Appointments to be listed:");

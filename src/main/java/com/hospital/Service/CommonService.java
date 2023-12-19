@@ -23,11 +23,11 @@ import java.util.TreeMap;
 @Service
 @RequiredArgsConstructor
 public class CommonService {
-
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
     private final NurseRepository nurseRepository;
     private final AppointmentRepository appointmentRepository;
+
 
     public boolean comprobateDni(String dni) {
         if (patientRepository.existsById(dni)) return true;

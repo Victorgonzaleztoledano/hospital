@@ -6,6 +6,7 @@ import com.hospital.Domain.Appointment;
 import com.hospital.Exception.*;
 import com.hospital.Repository.AppointmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -13,13 +14,18 @@ import java.time.LocalTime;
 import java.util.*;
 
 @Service
-@RequiredArgsConstructor
 public class AppointmentService {
-
     private final AppointmentRepository appointmentRepository;
     private final CommonService commonService;
-    private final DoctorService doctorService;
     private final NurseService nurseService;
+    private final DoctorService doctorService;
+
+    public AppointmentService(AppointmentRepository appointmentRepository, CommonService commonService, @Lazy NurseService nurseService, @Lazy DoctorService doctorService) {
+        this.appointmentRepository = appointmentRepository;
+        this.commonService = commonService;
+        this.nurseService = nurseService;
+        this.doctorService = doctorService;
+    }
 
     //Me crea la cita comprobando que no haya repetido y que todo exista
     public AppointmentOutput addAppointment(AppointmentInput a) throws EmployeeNotExistsException, DoctorNotExistsException, NurseNotExistsException, WrongTimeException, WrongDateException, PatientNotFoundException, AppointmentAlreadyExistsException {

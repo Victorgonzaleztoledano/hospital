@@ -20,8 +20,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class PatientController {
-
     private final PatientService patientService;
+
 
     @GetMapping
     public List<PatientOutput> getPatients() throws EmptyListException {

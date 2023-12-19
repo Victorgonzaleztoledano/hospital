@@ -6,10 +6,9 @@ import com.hospital.Controller.Output.PatientOutput;
 import com.hospital.Domain.Appointment;
 import com.hospital.Domain.Patient;
 import com.hospital.Exception.*;
-import com.hospital.Repository.AppointmentRepository;
 import com.hospital.Repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

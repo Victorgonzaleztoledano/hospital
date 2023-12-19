@@ -25,7 +25,6 @@ import java.util.TreeMap;
 public class DoctorController {
     private final DoctorService doctorService;
 
-
     @GetMapping
     public List<DoctorOutput> getDoctors() throws EmptyListException {
         log.info("Doctors to be listed:");
