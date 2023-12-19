@@ -61,6 +61,11 @@ public class NurseService {
         return commonService.listAppointmentsByCode(code);
     }
 
+    public NurseOutput findByCode(String code){
+        Nurse nurse = nurseRepository.findByCode(code);
+        return NurseOutput.getNurseOutput(nurse);
+    }
+
     public boolean existsByCode(String code){
         return nurseRepository.existsByCode(code);
     }

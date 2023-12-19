@@ -31,6 +31,13 @@ public class NurseController {
         return this.nurseService.listNurses();
     }
 
+    @GetMapping("/{id}")
+    public NurseOutput getNurseByCode(@PathVariable String code){
+        NurseOutput nurse = nurseService.findByCode(code);
+        log.info("Nurse to be listed: {}", nurse);
+        return nurse;
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public NurseOutput addNurse(@Valid @RequestBody NurseInput nurseInput) throws DniAlreadyExistsException {

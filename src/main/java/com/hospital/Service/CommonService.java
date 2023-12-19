@@ -7,6 +7,7 @@ import com.hospital.Repository.AppointmentRepository;
 import com.hospital.Repository.DoctorRepository;
 import com.hospital.Repository.NurseRepository;
 import com.hospital.Repository.PatientRepository;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
