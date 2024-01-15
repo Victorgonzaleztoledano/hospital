@@ -28,8 +28,7 @@ public class CommonService {
     private final DoctorRepository doctorRepository;
     private final NurseRepository nurseRepository;
     private final AppointmentRepository appointmentRepository;
-
-
+    
     public boolean comprobateDni(String dni) {
         if (patientRepository.existsById(dni)) return true;
         else if (doctorRepository.existsById(dni)) return true;
